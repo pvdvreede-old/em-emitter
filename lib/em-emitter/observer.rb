@@ -11,6 +11,7 @@ module EM
         @event = EM::Emitter::Event.new(event, self)
         @object = object
         @method = method
+        @is_active = true
       end
 
       def call_action(data)

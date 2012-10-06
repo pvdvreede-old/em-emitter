@@ -1,15 +1,9 @@
-require 'test/unit'
-require '../lib/em-emitter'
 require './helper'
 
 class ObserverTest < Test::Unit::TestCase
 
   def setup
-    @observer = EM::Emitter::Observer.new(
-      { :event => "1", :hash => "2" },
-      TestObject.new,
-      :method_that_should_be_run
-    )
+    @observer = create_observer
   end
 
   def test_call_action
