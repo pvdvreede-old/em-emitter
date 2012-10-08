@@ -30,9 +30,20 @@ module EM
             false
           end
         else
-          # TODO: add filter logic
-          true
+          filter_match?(other)
         end
+      end
+
+      def filter_match?(filter)
+        # logic for working out if the filter matches
+
+        # find any items in the event that is not in the filter
+        outersect = Hash[@event_hash.to_a - filter.to_a]
+
+        # if there are no elements that dont match we have a match
+        return true if outersect.count == 0
+
+        false
       end
     end
 

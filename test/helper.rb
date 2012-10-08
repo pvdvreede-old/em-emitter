@@ -28,7 +28,7 @@ end
 
 def create_event
   @event = EM::Emitter::Event.new(
-    { :event => "1", :hash => "2" },
+    { :first => "1", :second => "2", :third => "3", :fourth => "4" },
     create_observer
   )
 end
