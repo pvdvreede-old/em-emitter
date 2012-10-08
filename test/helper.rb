@@ -8,11 +8,21 @@ class TestObject
   end
 end
 
+
+
 def create_observer
   observer = EM::Emitter::Observer.new(
       { :event => "1", :hash => "2" },
       TestObject.new,
       :method_that_should_be_run
+  )
+end
+
+def create_bad_method_observer
+  observer = EM::Emitter::Observer.new(
+    { :event => "1", :hash => "2" },
+    TestObject.new,
+    :method_doesnt_exist
   )
 end
 
