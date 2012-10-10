@@ -6,7 +6,7 @@ module EM
     def self.max_listeners
       @@max_listeners
     end
-
+    # TODO add system events for when an observer is added and removed
     def self.max_listeners=(n)
       # TODO make this unchangeable once EM is running
       @@max_listeners = n
@@ -19,9 +19,11 @@ module EM
     def self.add_observer(object, event, method_to_call)
       raise EM::Emitter::MaxObserversReachedException.new if @@observers.count >= @@max_listeners
 
-      @@observers << EM::Emitter::Observer.new(event, object, method_to_call)
+      observer = EM::Emitter::Observer.new(event, object, method_to_call)
 
-      @@observers.count
+      @@observers << observer
+
+      observer
     end
 
     def self.remove_observer(observer)

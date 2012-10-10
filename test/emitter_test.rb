@@ -20,7 +20,6 @@ class SecondObservableTest
   include EM::Emitter::Observable
 
   def initialize
-
   end
 
 end
@@ -35,6 +34,8 @@ class EmitterTest < Test::Unit::TestCase
 
   def teardown
     EM::Emitter::clear_observers!
+    # reset observer max count
+    EM::Emitter::max_listeners = 50
   end
 
 
@@ -135,6 +136,25 @@ class EmitterTest < Test::Unit::TestCase
     assert_raise EM::Emitter::MaxObserversReachedException do
       @observable.receiver({ :name => "event3" }, :receive_event_1)
     end
+
+  end
+
+  def test_remove_receivers
+    # check the amount of observers is one from the setup
+    assert_equal 1, EM::Emitter::listeners_count, "Starting listeners count is not as expected."
+
+    # add another observer from another observable to confirm only the one observable's receivers are removed
+    @second_observable.receiver(:all, :doesnt_exist)
+    @second_observable.receiver(:all, :doesnt_exist1)
+
+    # check the amount of observers is one from the setup
+    assert_equal 3, EM::Emitter::listeners_count, "Second receiver not added."
+
+    # now clear the first observables receivers
+    @observable.remove_receivers!
+
+    # check the amount of observers is one from the setup
+    assert_equal 2, EM::Emitter::listeners_count, "Receivers not removed."
 
   end
 

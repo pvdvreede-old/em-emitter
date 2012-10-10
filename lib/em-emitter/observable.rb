@@ -2,6 +2,9 @@ module EM
   module Emitter
     module Observable
 
+      attr_reader :receivers
+      # TODO: pass event along with data to methods
+
       def uses_clone(cloner)
         @uses_clone = cloner
       end
@@ -17,8 +20,14 @@ module EM
       end
 
       def receiver(event, method_name)
-        EM::Emitter.add_observer(self, event, method_name)
+        @receivers ||= []
+        @receivers << EM::Emitter.add_observer(self, event, method_name)
         self
+      end
+
+      def remove_receivers!
+        @receivers.each { |rec| EM::Emitter.remove_observer(rec) }
+        @receivers = []
       end
 
       def clone_data(object)
