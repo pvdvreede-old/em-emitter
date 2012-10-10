@@ -35,8 +35,11 @@ module EM
     def self.emit(object, event, data)
       @@observers.each do |ob|
         if ob.is_active && ob.event == event
-          # call the method on the object with the data
-          ob.call_action(data)
+          # make the observer method calls async
+          EM.next_tick do
+            # call the method on the object with the data
+            ob.call_action(data)
+          end
         end
       end
 
