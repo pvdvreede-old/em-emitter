@@ -9,10 +9,14 @@ The filtering allows for Ruby hashes to be used and for objects to have fine gra
 The global emitter decouples all objects from each other and works by including the `EM::Emitter::Observable` module into any classes that wish to subscribe or emit events.
 
 ## Requirements
-TBD
+em-emitter has been run and tested on Ruby 1.9.3 with Eventmachine 1.0.0. You are welcome to try it on other versions of Ruby.
 
 ## Installation
-TBD
+To install em-emitter use ruby gems by typing:
+
+    gem install em-emitter --pre
+
+*Note:* This is a beta release of the first version so it is still under heavy development. Hence the need to append `--pre` to the installation command.
 
 ## Usage
 TBD
