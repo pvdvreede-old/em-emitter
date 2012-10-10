@@ -16,8 +16,9 @@ module EM
 
       def call_action(data)
         # only invoke the method if it can be invoked
-        if @object.nil? == false && @object.respond_to?(@method)
-          @object.send(@method, data)
+        if @object.nil? == false && @object.respond_to?(@method) &&
+          (@object.method(@method).arity == 2 || @object.method(@method).arity == -1)
+          @object.send(@method, data, @event.event_hash)
         end
       end
 

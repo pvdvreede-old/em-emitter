@@ -46,7 +46,7 @@ module EM
       end
 
       EM.next_tick do
-        # remove non active items first
+        # remove non active items
         @@observers.delete_if { |x| x.is_active == false }
       end
     end

@@ -6,13 +6,15 @@ class ObservableTest
   include EM::Emitter::Observable
 
   attr_reader :result
+  attr_reader :event
 
   def initialize
     receiver({ :name => "event1" }, :receive_event_1)
   end
 
-  def receive_event_1(message)
+  def receive_event_1(message, event)
     @result = message
+    @event = event
   end
 end
 
@@ -47,6 +49,9 @@ class EmitterTest < Test::Unit::TestCase
 
       EM.add_timer(1) do
         assert_equal "Firing event1", @observable.result, "The observable result was not set."
+
+        # check event was also passed
+        assert_equal( {:name => "event1" }, @observable.event, "The event passed isnt correct.")
         EM.stop
       end
 
