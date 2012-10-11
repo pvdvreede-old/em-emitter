@@ -7,14 +7,22 @@ class ObservableTest
 
   attr_reader :result
   attr_reader :event
+  attr_reader :observer_added
+  attr_reader :observer_added_count
 
   def initialize
     receiver({ :name => "event1" }, :receive_event_1)
+
   end
 
   def receive_event_1(message, event)
     @result = message
     @event = event
+  end
+
+  def check_add_observer_fired(data, event)
+    @observer_added = data[:observer]
+    @observer_added_count = data[:listeners_count]
   end
 end
 
@@ -52,6 +60,7 @@ class EmitterTest < Test::Unit::TestCase
 
         # check event was also passed
         assert_equal( {:name => "event1" }, @observable.event, "The event passed isnt correct.")
+
         EM.stop
       end
 
@@ -161,6 +170,28 @@ class EmitterTest < Test::Unit::TestCase
     # check the amount of observers is one from the setup
     assert_equal 2, EM::Emitter::listeners_count, "Receivers not removed."
 
+  end
+
+  def test_observer_added_event_fired
+    EM.run do
+
+      @observable.receiver({
+        :from => '_emitter',
+        :action => 'add_observer'
+      }, :check_add_observer_fired)
+
+      # check the amount of observers is one from the setup
+      assert_equal 2, EM::Emitter::listeners_count, "Starting listeners count is not as expected."
+
+      assert_nil @observable.observer_added, "The added observer is already populated."
+      @second_observable.receiver({ :test => :test }, :doesnt_exist)
+
+      EM.add_timer(1) do
+        assert_equal @second_observable.receivers.first, @observable.observer_added, "The observer is not there from the event."
+        assert_equal EM::Emitter::listeners_count, @observable.observer_added_count, "The observer count emitted is not correct."
+        EM.stop
+      end
+    end
   end
 
 end

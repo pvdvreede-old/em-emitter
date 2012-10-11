@@ -15,7 +15,7 @@ module EM
           object = clone_data(object)
         end
 
-        EM::Emitter.emit(self, event, object)
+        EM::Emitter.emit(event, object)
         self
       end
 

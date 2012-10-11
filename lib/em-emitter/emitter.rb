@@ -6,7 +6,7 @@ module EM
     def self.max_listeners
       @@max_listeners
     end
-    # TODO add system events for when an observer is added and removed
+
     def self.max_listeners=(n)
       # TODO make this unchangeable once EM is running
       @@max_listeners = n
@@ -23,18 +23,46 @@ module EM
 
       @@observers << observer
 
+      # emit a system event that an observer has been added with the observer and the listener count
+      EM::Emitter::emit({
+        :from => '_emitter',
+        :action => 'add_observer'
+      }, {
+        :observer => observer,
+        :listeners_count => @@observers.count
+      })
+
       observer
     end
 
     def self.remove_observer(observer)
       @@observers.delete_if { |x| x == observer }
+
+      # emit a system event that an observer has been remove with the observer and the listener count
+      EM::Emitter::emit({
+        :from => '_emitter',
+        :action => 'remove_observer'
+      }, {
+        :observer => observer,
+        :listeners_count => @@observers.count
+      })
     end
 
     def self.clear_observers!
       @@observers = []
+
+      # emit a system event that all observers have been removed
+      EM::Emitter::emit({
+        :from => '_emitter',
+        :action => 'clear_observers'
+      }, {
+        :listeners_count => @@observers.count
+      })
+
+      @@observers.count
     end
 
-    def self.emit(object, event, data)
+    def self.emit(event, data)
       @@observers.each do |ob|
         if ob.is_active && ob.event == event
           # make the observer method calls async
