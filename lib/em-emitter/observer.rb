@@ -14,11 +14,11 @@ module EM
         @is_active = true
       end
 
-      def call_action(data)
+      def call_action(data, event)
         # only invoke the method if it can be invoked
         if @object.nil? == false && @object.respond_to?(@method) &&
           (@object.method(@method).arity == 2 || @object.method(@method).arity == -1)
-          @object.send(@method, data, @event.event_hash)
+          @object.send(@method, data, event)
         end
       end
 

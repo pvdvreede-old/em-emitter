@@ -9,12 +9,12 @@ class ObserverTest < Test::Unit::TestCase
 
   def test_call_action
     # check that the return value of the method is returned
-    assert_equal "run hello world", @observer.call_action("hello world"),
+    assert_equal "run hello world", @observer.call_action("hello world", {}),
       "The observer does not call the method on evented object."
 
     # test that calling a non existent method doesnt throw an exception
     assert_nothing_raised do
-      assert !@no_method_observer.call_action("hello world"), "Bad method call didnt return a nil value"
+      assert !@no_method_observer.call_action("hello world", {}), "Bad method call didnt return a nil value"
     end
   end
 

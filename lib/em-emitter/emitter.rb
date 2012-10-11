@@ -68,15 +68,13 @@ module EM
           # make the observer method calls async
           EM.next_tick do
             # call the method on the object with the data
-            ob.call_action(data)
+            ob.call_action(data, event)
           end
         end
       end
 
-      EM.next_tick do
-        # remove non active items
-        @@observers.delete_if { |x| x.is_active == false }
-      end
+      # remove non active items
+      @@observers.delete_if { |x| x.is_active == false }
     end
   end
 end
