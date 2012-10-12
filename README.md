@@ -22,4 +22,4 @@ To install em-emitter use ruby gems by typing:
 TBD
 
 ## License
-TBD
+em-emitter is licensed under the MIT License and can be used and edited for open source or commercial projects.
